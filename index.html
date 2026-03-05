@@ -1,45 +1,364 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numero par</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        p {
-            font-size: 18px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin: 10px 0;
-        }
-        a {
-            text-decoration: none;
-            color: #007BFF;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Número Par o Impar</title>
+
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f1b33;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.12);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,.72);
+      --accent:#67e8f9;
+      --accent2:#a78bfa;
+      --shadow: 0 18px 45px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(103,232,249,.25), transparent 60%),
+        radial-gradient(800px 550px at 80% 20%, rgba(167,139,250,.22), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 16px;
+    }
+
+    .wrap{
+      width: min(1050px, 100%);
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 900px){
+      .wrap{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero{
+      padding: 26px 26px 22px;
+      position: relative;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(420px 220px at 25% 20%, rgba(103,232,249,.22), transparent 65%),
+        radial-gradient(420px 220px at 70% 40%, rgba(167,139,250,.18), transparent 70%);
+      filter: blur(8px);
+      z-index:0;
+    }
+
+    .hero > *{ position: relative; z-index: 1; }
+
+    .topline{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .dot{
+      width:10px; height:10px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 4px rgba(103,232,249,.12);
+    }
+
+    h1{
+      margin: 8px 0 10px;
+      font-size: clamp(26px, 2.3vw, 36px);
+      letter-spacing: .2px;
+      line-height: 1.15;
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 70ch;
+    }
+
+    .kpiRow{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 650px){
+      .kpiRow{ grid-template-columns: 1fr; }
+    }
+
+    .kpi{
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .kpi .label{
+      font-size: 12px;
+      letter-spacing: .3px;
+      color: rgba(234,240,255,.65);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .kpi .value{
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .highlight{
+      color: var(--text);
+      font-weight: 700;
+      background: linear-gradient(90deg, rgba(103,232,249,.20), rgba(167,139,250,.18));
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .side{
+      padding: 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section{
+      padding: 16px 16px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .section h2{
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+
+    .section p{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14.5px;
+    }
+
+    .list{
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list a{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      text-decoration:none;
+      color: var(--text);
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .list a:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.075);
+      border-color: rgba(103,232,249,.25);
+    }
+
+    .pill{
+      font-size: 12px;
+      color: rgba(234,240,255,.75);
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+
+    .code{
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(10, 16, 30, .55);
+      overflow:auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      color: rgba(234,240,255,.9);
+      line-height: 1.6;
+    }
+
+    .footer{
+      margin-top: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: rgba(234,240,255,.65);
+      font-size: 12.5px;
+    }
+
+    .miniLink{
+      color: rgba(234,240,255,.85);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(234,240,255,.35);
+    }
+    .miniLink:hover{
+      border-bottom-color: rgba(103,232,249,.65);
+    }
+  </style>
 </head>
+
 <body>
-    <p>
-        Este es un programa en el que el usuario ingresa un numero y el programa determina si es par o impar.
-    </p>
-    <br>
-    <p>
-        Tiene documentos como:
-        <ul>
-            <li><a href="par.html">Numero par</a></li>
-            <li><a href="impar.html">Numero impar</a></li>
+  <main class="wrap">
+    <!-- HERO / CONTENIDO PRINCIPAL -->
+    <section class="card hero">
+      <div class="topline">
+        <span class="badge">
+          <span class="dot"></span>
+          Página informativa del proyecto
+        </span>
+        <span class="badge">Python • Lógica básica</span>
+      </div>
+
+      <h1>Número Par o Impar</h1>
+
+      <p class="subtitle">
+        Este programa permite que el usuario ingrese un número y el sistema determine si es
+        <span class="highlight">par</span> o <span class="highlight">impar</span> usando el residuo de la división.
+      </p>
+
+      <div class="kpiRow">
+        <div class="kpi">
+          <div class="label">Entrada</div>
+          <p class="value">Un número entero</p>
+        </div>
+        <div class="kpi">
+          <div class="label">Regla</div>
+          <p class="value">n % 2 == 0</p>
+        </div>
+        <div class="kpi">
+          <div class="label">Salida</div>
+          <p class="value">Par / Impar</p>
+        </div>
+      </div>
+
+      <div class="section" style="margin-top:14px;">
+        <h2>¿Cómo funciona?</h2>
+        <p>
+          Si el residuo de dividir el número entre 2 es 0, el número es <b>par</b>.
+          Si el residuo es distinto de 0, el número es <b>impar</b>.
+        </p>
+
+        <pre class="code"># Ejemplo (idea principal)
+n = int(input("Ingresa un número: "))
+if n % 2 == 0:
+    print("El número es par")
+else:
+    print("El número es impar")</pre>
+
+        <div class="footer">
+          <span>Tip: “%” se llama operador módulo (residuo).</span>
+          <span>Hecho para práctica de lógica</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LADO DERECHO / SECCIONES -->
+    <aside class="card side">
+      <div class="section">
+        <h2>Contenido del proyecto</h2>
+        <p>
+          Estas páginas complementan la explicación del programa y describen
+          qué significa que un número sea par o impar.
+        </p>
+
+        <ul class="list">
+          <li>
+            <a href="par.html">
+              <span>Concepto: Número par</span>
+              <span class="pill">par.html</span>
+            </a>
+          </li>
+          <li>
+            <a href="impar.html">
+              <span>Concepto: Número impar</span>
+              <span class="pill">impar.html</span>
+            </a>
+          </li>
         </ul>
-    </p>
+      </div>
+
+      <div class="section">
+        <h2>Ejemplo rápido</h2>
+        <p>
+          Si el usuario escribe <b>8</b>, el resultado será <b>par</b>.
+          Si escribe <b>9</b>, el resultado será <b>impar</b>.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Notas</h2>
+        <p>
+          Esta página es solo informativa (ideal como <b>index.html</b> para tu repo).
+          Si quieres, puedo maquetar también <b>par.html</b> y <b>impar.html</b> con el mismo estilo.
+        </p>
+        <p style="margin-top:10px;">
+          <a class="miniLink" href="#">Volver arriba</a>
+        </p>
+      </div>
+    </aside>
+  </main>
 </body>
 </html>
